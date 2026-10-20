@@ -279,6 +279,13 @@
       color: var(--mute);
     }
     .faq-item.open .faq-answer { display: block; }
+    /* FAQ : états explicites pour un clic fiable sur mobile et ordinateur */
+    .faq-q { appearance: none; -webkit-appearance: none; display: flex; }
+    .faq-q > span:first-child { flex: 1; }
+    .faq-q[data-faq-toggle] { pointer-events: auto; position: relative; z-index: 1; }
+    .faq-answer[hidden] { display: none !important; }
+    .faq-answer:not([hidden]) { display: block !important; }
+    .faq-item.is-open .faq-plus { transform: rotate(45deg); background: rgba(8,102,255,.28); }
     .faq-answer b { color: var(--bone); font-weight: 600; }
 
     /* Parcours collaboration (chips) */
@@ -293,7 +300,50 @@
       .scene .anim { opacity: 1 !important; transform: none !important; filter: none !important; }
       .scene:not(.in) .anim { opacity: 1 !important; }
     }
-  </style>
+  
+    /* FAQ repensée en cartes statiques : aucun clic ni JavaScript requis */
+    .faq-static-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      width: 100%;
+      margin: 24px auto 0;
+    }
+    .faq-static-card {
+      min-width: 0;
+      padding: 22px 22px 20px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+      text-align: left;
+    }
+    .faq-static-number {
+      margin-bottom: 13px;
+      color: #6ea5ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+    .faq-static-card h3 {
+      margin: 0 0 12px;
+      color: inherit;
+      font-size: clamp(15px, 1.35vw, 18px);
+      line-height: 1.45;
+      font-weight: 700;
+    }
+    .faq-static-card p {
+      margin: 0;
+      color: inherit;
+      opacity: .78;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    @media (max-width: 700px) {
+      .faq-static-grid { grid-template-columns: 1fr; gap: 11px; }
+      .faq-static-card { padding: 18px; }
+    }
+
+</style>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -353,7 +403,7 @@
         <ul class="no">
           <li class="anim ltr" style="--d:.42s"><svg aria-hidden="true"><use href="#ko"/></svg><span>Vous lancez une nouvelle offre.</span></li>
           <li class="anim ltr" style="--d:.48s"><svg aria-hidden="true"><use href="#ko"/></svg><span>Vous ciblez la population rurale.</span></li>
-          <li class="anim ltr" style="--d:.54s"><svg aria-hidden="true"><use href="#ko"/></svg><span>Votre entreprise a pas plus de 3 offres signatures.</span></li>
+          <li class="anim ltr" style="--d:.54s"><svg aria-hidden="true"><use href="#ko"/></svg><span>Votre entreprise n'a pas plus de 3 offres signatures.</span></li>
         </ul>
       </div>
     </section>
@@ -462,29 +512,40 @@
       <div class="wrap sec">
         <p class="eyebrow anim" style="--d:.05s">Vos questions</p>
         <h2 class="anim" style="--d:.1s">Questions <em>fréquentes</em></h2>
-        <div class="faq">
-          <div class="faq-item anim" style="--d:.14s">
-            <button type="button" class="faq-q" aria-expanded="false">Faut-il déjà avoir un compte Meta Ads ? <span class="faq-plus">+</span></button>
-            <div class="faq-answer">Non, <b>ce n'est pas obligatoire</b>. Nous pouvons créer et configurer votre compte (Business Manager, pixel, pages) ou reprendre un compte existant lors de l'audit technique.</div>
-          </div>
-          <div class="faq-item anim" style="--d:.2s">
-            <button type="button" class="faq-q" aria-expanded="false">Combien de temps avant de voir les premiers résultats ? <span class="faq-plus">+</span></button>
-            <div class="faq-answer">Les <b>premiers résultats apparaissent sous 2 semaines</b>. Les campagnes sont ensuite optimisées en continu pour améliorer la rentabilité.</div>
-          </div>
-          <div class="faq-item anim" style="--d:.26s">
-            <button type="button" class="faq-q" aria-expanded="false">Que se passe-t-il si le premier mois ne donne aucun résultat ? <span class="faq-plus">+</span></button>
-            <div class="faq-answer">Si <b>aucun résultat n'est constaté le premier mois</b>, <b>50 % des frais vous sont remboursés</b>. C'est notre engagement.</div>
-          </div>
-          <div class="faq-item anim" style="--d:.32s">
-            <button type="button" class="faq-q" aria-expanded="false">Le budget publicitaire est-il inclus dans l'offre ? <span class="faq-plus">+</span></button>
-            <div class="faq-answer">Non. Les <b>1 297 000 MGA</b> couvrent l'audit, les scripts, la production et la diffusion technique. Le <b>budget média versé à Meta n'est pas inclus</b> et reste à votre charge, défini ensemble selon vos objectifs.</div>
-          </div>
-          <div class="faq-item anim" style="--d:.38s">
-            <button type="button" class="faq-q" aria-expanded="false">Qui réalise le tournage et le montage ? <span class="faq-plus">+</span></button>
-            <div class="faq-answer">Le <b>tournage et le montage sont réalisés par Licorne</b>, via notre équipe technique interne. Vous n'avez aucun prestataire à chercher : tout est coordonné par nos soins.</div>
-          </div>
+        <div class="faq-static-grid" aria-label="Questions et réponses fréquentes">
+          <article class="faq-static-card anim" style="--d:0.13s">
+            <div class="faq-static-number">01</div>
+            <h3>Faut-il déjà avoir un compte Meta Ads ?</h3>
+            <p>Non, ce n’est pas obligatoire. Nous pouvons créer et configurer votre compte (Business Manager, pixel et pages), ou reprendre un compte existant lors de l’audit technique.</p>
+          </article>
+          <article class="faq-static-card anim" style="--d:0.18s">
+            <div class="faq-static-number">02</div>
+            <h3>Combien de temps avant de voir les premiers résultats ?</h3>
+            <p>Les premiers résultats peuvent apparaître sous deux semaines. Les campagnes sont ensuite optimisées en continu pour améliorer leur rentabilité.</p>
+          </article>
+          <article class="faq-static-card anim" style="--d:0.23s">
+            <div class="faq-static-number">03</div>
+            <h3>Que se passe-t-il si le premier mois ne donne aucun résultat ?</h3>
+            <p>Si aucun résultat n’est constaté le premier mois, 50 % des frais vous sont remboursés. C’est notre engagement.</p>
+          </article>
+          <article class="faq-static-card anim" style="--d:0.28s">
+            <div class="faq-static-number">04</div>
+            <h3>Le budget publicitaire est-il inclus dans l’offre ?</h3>
+            <p>Non. Les 1 297 000 MGA couvrent l’audit, les scripts, la production et la diffusion technique. Le budget média payé à Meta n’est pas inclus et reste à votre charge ; il est défini ensemble selon vos objectifs.</p>
+          </article>
+          <article class="faq-static-card anim" style="--d:0.33s">
+            <div class="faq-static-number">05</div>
+            <h3>Qui réalise le tournage et le montage ?</h3>
+            <p>Le tournage et le montage sont réalisés par Licorne, via notre équipe technique interne. Vous n’avez pas de prestataire à chercher : tout est coordonné par nos soins.</p>
+          </article>
         </div>
       </div>
+        <div class="final-cta anim" style="--d:.44s;margin-top:12px">
+          <a class="btn" data-wa href="https://wa.me/261343212369" target="_blank" rel="noopener">
+            <svg aria-hidden="true"><use href="#wa"/></svg>Parler à Licorne sur WhatsApp
+          </a>
+          <p class="note">Une question supplémentaire ? Écrivez-nous directement.</p>
+        </div>
     </section>
 
     <section class="scene" id="scene-contact">
@@ -521,19 +582,6 @@
       function $(id) { return document.getElementById(id); }
       function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
       function fmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
-
-      /* ===== FAQ — branché en priorité, indépendant du reste ===== */
-      (function initFaq() {
-        var questions = document.querySelectorAll(".faq-q");
-        for (var i = 0; i < questions.length; i++) {
-          questions[i].addEventListener("click", function () {
-            var item = this.closest(".faq-item");
-            if (!item) return;
-            var isOpen = item.classList.toggle("open");
-            this.setAttribute("aria-expanded", isOpen ? "true" : "false");
-          });
-        }
-      })();
 
       /* ===== WhatsApp ===== */
       var WA_NUMBER = "261343212369";
